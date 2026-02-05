@@ -1,0 +1,95 @@
+# ------------------------------------------------------------------------------
+# Program Name: AliaCan
+# Creator: Xzrayツ
+# Description: CMake Uninstall Script for AliaCan
+# 
+# This script is designed to safely uninstall files that were installed
+# by a CMake project. Then attempts to remove each file. The script 
+# provides detailed logging and a summary of the uninstall operation,
+# including counts of successfully removed files, already removed files,
+# and any errors encountered.
+# ------------------------------------------------------------------------------
+
+# Check if the install manifest file exists.
+# The manifest contains a list of all files installed by the CMake project.
+# If it doesn't exist, the uninstall cannot proceed.
+if(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
+    # Output a fatal error message and stop execution if manifest is missing.
+    message(FATAL_ERROR "Cannot find install manifest: \"@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt\"")
+endif()
+
+# Read the entire contents of the install manifest file into a variable.
+# Each line in the file represents one installed file path.
+file(READ "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt" files)
+
+# Convert the file content from a single string with newline separators
+# into a CMake list where each element is one file path.
+# This makes it easier to iterate through each file individually.
+string(REPLACE "\n" ";" files "${files}")
+
+# Initialize counters to track the results of the uninstall operation.
+set(uninstall_count 0)   # Files successfully removed.
+set(skip_count 0)        # Files already missing (no action needed).
+set(error_count 0)       # Files that failed to remove due to errors.
+
+# Iterate over each file path in the manifest.
+foreach(f ${files})
+    # Skip empty lines that may appear in the manifest.
+    if(NOT f)
+        continue()
+    endif()
+
+    # Construct the full path to the file, considering DESTDIR if set.
+    # DESTDIR is an environment variable used for staged installations.
+    set(p "$ENV{DESTDIR}${f}")
+    
+    # Log the current file being processed for uninstallation.
+    message(STATUS "Uninstalling: \"${p}\"")
+
+    # Check if the file exists and is not a symbolic link.
+    # Note: We skip the existence check for symlinks because they might be
+    # broken (pointing to non-existent targets), but we still want to remove them.
+    if(NOT IS_SYMLINK "${p}" AND NOT EXISTS "${p}")
+        # File doesn't exist (and isn't a symlink), so nothing to remove.
+        message(STATUS "  ⊗ File does not exist")
+        math(EXPR skip_count "${skip_count}+1")  # Increment skip counter.
+        continue()  # Move to the next file.
+    endif()
+
+    # Attempt to remove the file using CMake's remove command.
+    # The -E remove -f command forcefully removes the file.
+    # RESULT_VARIABLE captures the exit code (0 for success).
+    # ERROR_VARIABLE captures any error output from the command.
+    execute_process(
+        COMMAND "@CMAKE_COMMAND@" -E remove -f "${p}"
+        RESULT_VARIABLE r
+        ERROR_VARIABLE x
+    )
+
+    # Check if the removal command failed (non-zero exit code).
+    if(r)
+        # Log a warning with the error details.
+        message(WARNING "Problem when removing \"${p}\": ${x}")
+        math(EXPR error_count "${error_count}+1")  # Increment error counter.
+    else()
+        # Successfully removed the file.
+        message(STATUS "  ✓ Removed")
+        math(EXPR uninstall_count "${uninstall_count}+1")  # Increment success counter.
+    endif()
+endforeach()
+
+# Output a formatted summary of the uninstall operation.
+message(STATUS "")
+message(STATUS "========================================")
+message(STATUS "Uninstall Summary")
+message(STATUS "========================================")
+message(STATUS "Successfully removed: ${uninstall_count} file(s)")
+message(STATUS "Already removed: ${skip_count} file(s)")
+message(STATUS "Error(s): ${error_count}")
+message(STATUS "========================================")
+
+# If any errors occurred during uninstallation, stop with a fatal error.
+# This ensures the user is aware that not everything was cleaned up properly.
+if(error_count GREATER 0)
+    message(FATAL_ERROR "${error_count} file(s) failed to uninstall")
+endif()
