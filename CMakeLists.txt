@@ -40,7 +40,8 @@ add_compile_options(-Wall -Wextra -Wpedantic)
 
 # Optimization and security hardening flags for C++ compilation.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
-    -march=native -mtune=native \
+    -march=native \
+    -mtune=native \
     -O3 \
     -pipe \
     -fno-plt \
