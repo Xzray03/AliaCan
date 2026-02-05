@@ -27,7 +27,7 @@ A powerful, user-friendly shell alias manager for Linux with automatic backups, 
 - Error handling and recovery
 
 🚀 **Performance**
-- Lightweight C++23 implementation
+- Lightweight C++ implementation
 - Minimal resource footprint
 - Fast alias parsing and loading
 - Optimized backup management
