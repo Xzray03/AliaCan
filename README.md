@@ -36,7 +36,7 @@ A powerful, user-friendly shell alias manager for Linux with automatic backups, 
 ## Requirements
 
 ### Build Dependencies
-- C++23 compatible compiler (GCC 13+, Clang 16+)
+- C++ compatible compiler (GCC 13+, Clang 16+)
 - CMake 3.28+
 - Qt6 (Core, Gui, Widgets)
 - Linux kernel 5.10+
@@ -64,7 +64,7 @@ A powerful, user-friendly shell alias manager for Linux with automatic backups, 
 1. **Clone or download the repository**
 
 ```bash
-git clone https://github.com/Xzray3/AliaCan.git
+git clone https://github.com/Xzray03/AliaCan.git
 cd alia-can
 ```
 
