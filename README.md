@@ -197,4 +197,4 @@ Developed with ❤️ for Linux users who love their shell aliases.
 
 -----------------------------------------------------------------------------
 
-**Made with C++23 and Qt6** • **Cross-platform • Open Source • Free Forever**
+**Made with C++ and Qt6** • **Cross-platform • Open Source • Free Forever**
