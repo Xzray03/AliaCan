@@ -1,6 +1,6 @@
 # AliaCan - Shell Alias Manager with Auto-Backup
 
-![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)
+![Version](https://img.shields.io/badge/version-0.0.1.1-blue.svg)
 ![License](https://img.shields.io/badge/license-GPLv2-blue.svg)
 ![C++](https://img.shields.io/badge/C%2B%2B-23-blue.svg)
 ![Qt6](https://img.shields.io/badge/Qt-6.0+-blue.svg)
